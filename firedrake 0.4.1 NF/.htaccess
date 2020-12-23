@@ -1,0 +1,12 @@
+Options +ExecCGI
+AddHandler cgi-script cgi
+DirectoryIndex index.cgi
+
+<Files .*>
+    Order Deny,Allow
+    Deny from all
+</Files>
+<Files *.pm>
+    Order Deny,Allow
+    Deny from all
+</Files>

@@ -1,0 +1,24 @@
+README
+This is the readme for the firedrake firewall :).
+
+Let me begin by saying what you need to run firedrake.
+-A linux box connected to the internet obviously :)
+-apache with cgi support enabled and worling
+	. you can check this by running the test-cgi script in you cgi-bin directory
+	 http://www.yourdomain.com/cgi-bin/test-cgi
+-sudo ... altho it is not necesary, I would recommend it.
+	.Alternatives are: run apache as root (not recommended)
+	                   making iptables executable by the apache user (don't ask me how)
+	 if you chose sudo, you will need apache's user in sudoers file
+	 example (from Debian:) AuthUserFile /etc/apache2/firewall
+-working iptables ... built in or modules
+	.NOTE: if you have iptables as modules you should first load them in your iptables script.
+
+That just about sums it up I guess :)
+For instalation instructions read INSTALL.
+
+This software is not yet completed nor fully translated to english!
+Altho it can simplify handling the firewall you should be very careful what you input sice
+there is no imput screening yet ... it's on my TODO list I promise :)
+
+So far I'd recomend it only for learning and experimenting :)

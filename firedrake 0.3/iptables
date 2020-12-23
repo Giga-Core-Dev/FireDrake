@@ -1,0 +1,190 @@
+#!/bin/bash
+
+###################################################################
+####				START			       ####
+####		Firedrake 0.3 iptables script		       ####
+###################################################################
+
+config="/path/to/config"
+
+####
+####Modprobe
+####
+
+#   modprobe ip_tables                  # Required; all ipv4 modules depend on this one
+#    modprobe ipt_limit                  # Allows log limits
+#    modprobe ipt_state                  # Permits packet state checking (SYN, SYN-ACK, ACK, and so on).
+#   modprobe ip_conntrack               # Permits connection tracking and packet defragmentation.
+#   modprobe ip_conntrack_ftp           # Permits active FTP; requires ip_conntrack
+#    modprobe ipt_multiport              # Allows packet specifications on multiple ports
+#    modprobe iptable_filter             # Implements the filter table
+#   modprobe ipt_mac                    # Allows specifying MAC address
+#   modprobe ip_conntrack_irc         
+#   modprobe ip_nat_irc
+#    modprobe iptable_nat              # Implements nat table
+#   modprobe ip_nat_ftp               # Permits active FTP via nat; requires ip_conntrack, iptables_nat
+
+###################################################################
+#### konfiguracija 	                                       ####
+###################################################################
+
+source $config
+
+###################################################################
+#### Privzeta dejanja (drop:)				       ####
+###################################################################
+
+iptables -P INPUT DROP
+iptables -P FORWARD DROP
+iptables -P OUTPUT ACCEPT
+
+###################################################################
+####Ciscenje iptablesov (odstranjevanje starih pravil)	       ####
+###################################################################
+
+iptables -F
+iptables -X
+
+iptables -t nat -F
+iptables -t nat -X
+
+iptables -F INPUT
+iptables -F OUTPUT
+iptables -F FORWARD
+
+###################################################################
+###################################################################
+####				INPUT			       ####
+###################################################################
+###################################################################
+
+iptables -A INPUT -i lo -j ACCEPT
+
+####
+#**#
+####
+
+iptables -A INPUT -p ALL -i $LAN_IFACE -s $LAN_IP_RANGE -j ACCEPT
+iptables -A INPUT -p ALL -i $LO_IFACE -s $LO_IP -j ACCEPT
+iptables -A INPUT -p ALL -i $LO_IFACE -s $LAN_IP -j ACCEPT
+iptables -A INPUT -p ALL -i $LO_IFACE -s $INET_IP -j ACCEPT
+
+#### DHCP:
+#iptables -A INPUT -p UDP -i $LAN_IFACE --dport 67 --sport 68 -j ACCEPT
+
+#### Dovolimo ze vzpostavljene povezave
+iptables -A INPUT -p ALL -d $INET_IP -m state --state ESTABLISHED,RELATED -j ACCEPT
+
+###################################################################
+###################################################################
+####				PORTI			       ####
+###################################################################
+###################################################################
+
+###################################################################
+#### TCP -odpri						       ####
+###################################################################
+
+for vnos in $ODPRI_TCP; do
+	  port=`echo $vnos | awk -F- '{ print $1 }'`
+        ipji=`echo $vnos | awk -F- '{ print $2 }'`
+        ipji=`echo $ipji | tr ";" " "`
+        for ip in $ipji; do
+	  	iptables -A INPUT -p TCP -s $ip --dport $port -j ACCEPT
+	  done
+done
+
+
+###################################################################
+#### UDP -odpri						       ####
+###################################################################
+
+for vnos in $ODPRI_UDP; do
+	  port=`echo $vnos | awk -F- '{ print $1 }'`
+        ipji=`echo $vnos | awk -F- '{ print $2 }'`
+        ipji=`echo $ipji | tr ";" " "`
+        for ip in $ipji; do
+	  	iptables -A INPUT -p UDP -s $ip --dport $port -j ACCEPT
+	  done
+done
+
+###################################################################
+###################################################################
+####			 	FORWARD			       ####
+###################################################################
+###################################################################
+
+iptables -A FORWARD -i $LAN_IFACE -j ACCEPT
+iptables -A FORWARD -m state --state ESTABLISHED,RELATED -j ACCEPT
+
+###################################################################
+#### TCP -forward					       ####
+###################################################################
+
+for vnos in $FORWARD_TCP; do
+        IP=`echo $vnos | awk -F- '{ print $1 }'`
+        porti=`echo $vnos | awk -F- '{ print $2 }'`
+	  porti=`echo $porti | tr ";" " "`
+	  for port in $porti do;
+	  	iptables -t nat -A PREROUTING -i $INET_IFACE -p tcp --dport $port -j DNAT --to $IP
+		iptables -A FORWARD -p tcp --dport $port -j ACCEPT
+	  done
+done 
+
+###################################################################
+#### UDP -forward	       				       ####
+###################################################################
+
+for vnos in $FORWARD_UDP; do
+        IP=`echo $vnos | awk -F- '{ print $1 }'`
+        porti=`echo $vnos | awk -F- '{ print $2 }'`
+	  porti=`echo $porti | tr ";" " "`
+	  for port in $porti do;
+	  	iptables -t nat -A PREROUTING -i $INET_IFACE -p udp --dport $port -j DNAT --to $IP
+		iptables -A FORWARD -p udp --dport $port -j ACCEPT
+	  done
+done 
+
+#Blokirani zunanji DHCP requesti:
+iptables -A INPUT -p UDP -i $INET_IFACE -d 255.255.255.255 --destination-port 67:68 -j DROP
+
+####
+#### ICMP pravila
+####
+
+# icmp-type 8 <- echo request (ping); icmp-type 11 <- ttl=0;
+iptables -A INPUT -p ICMP -s 0/0 --icmp-type 8 -j ACCEPT
+iptables -A INPUT -p ICMP -s 0/0 --icmp-type 11 -j ACCEPT
+
+###################################################################
+####				IPV6			       ####
+###################################################################
+test -f /proc/net/if_inet6 && echo "Kernel podpira ipv6 protokol ... omogocam :)"
+modprobe ipv6
+lsmod |grep -w 'ipv6' > /dev/null && echo "IPv6 modul je bil uspesno nalozen :)"
+
+iptables -A INPUT -p 41 -j ACCEPT
+###################################################################
+
+###################################################################
+###################################################################
+####			 Deljenje povezave       	       ####
+###################################################################
+###################################################################
+
+echo "1" > /proc/sys/net/ipv4/ip_forward
+
+iptables -t nat -A POSTROUTING -o $INET_IFACE -j MASQUERADE
+
+####
+#### Ce routamo preko nekaterih sistemskih konfiguracij (Debian), dolocene strani in aplikacije ne delujejo (predvsem microsoftove)
+#### zaradi problemov z MTU (Maximum Transmission Unit) ... Te probleme odpravi naslednja vrstica:
+####
+
+iptables -I FORWARD -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-mss-to-pmtu
+
+###################################################################
+####				END			       ####
+###################################################################
+
+

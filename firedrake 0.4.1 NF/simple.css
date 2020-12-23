@@ -1,0 +1,103 @@
+/* CSS Document */
+body,td,th {
+	font-family: Courier New, Courier, monospace;
+	font-size: 14px;
+	color: #000000;
+}
+body {
+	background-color: #FFFFFF;
+}
+a:link,a:visited {
+	color: #000000;
+	text-decoration: none;
+}
+a:hover {
+	text-decoration: none;
+	color: #666666;
+}
+a:active {
+	text-decoration: none;
+	color: #CCCCCC;
+}
+#banner {
+	background:url(backblackline.png) repeat-x;
+	width:100%;
+	margin-top:0;
+	padding:0;
+}
+#left {
+	background:url(justtheline.png) repeat-x;
+	width:18%;
+	margin-top:10px;
+	float:left;
+	margin-left:1%;
+	padding-top:2px;
+}
+#center {
+	background:url(justtheline.png) repeat-x;
+	width:79%;
+	margin-top:10px;
+	float:left;
+	margin-left:1%;
+	padding-top:2px;
+}
+#footer {
+	background:url(justtheline.png) repeat-x;
+	bottom: 10px;
+	position: absolute;
+	width: 99%;
+	font-size:9px;
+	text-align:right;
+}
+
+/*********************LOGIN*******************/
+#login {
+	position: absolute;
+	top: 0;
+ 	right: 0;
+	bottom: 0;
+	left: 0;
+	color:#000000;
+	width: 250px;
+	height: 115px;
+	margin: auto;
+	text-align:center;
+	vertical-align:middle;
+}
+#lheader {
+	height:20px;
+	background:url(justtheline.png) repeat-x;
+}
+#lmain {
+	height:75px;
+}
+#lfooter {
+	height:20px;
+	background:url(justtheline.png) bottom repeat-x;
+}
+INPUT {
+	background-color:#FFFFFF;
+	border:1px solid #000000;
+	color:#000000;
+}
+INPUT:focus {
+	background-color:#CCCCCC;
+	color:#666666;
+}
+INPUT:hover {
+	background-color:#CCCCCC;
+	color:#FFFFFF;
+	border-color:#666666;
+}
+INPUT,INPUT:focus,INPUT:hover {
+	font-family: Courier New, Courier, monospace;
+	font-size: 12px;
+}
+/*********************************************/
+
+#error {
+	color:#FF0000;
+}
+#allok {
+	color:#009900;
+} 

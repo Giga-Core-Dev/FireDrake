@@ -1,0 +1,91 @@
+INSTALL firedrake 0.3
+Here I will attempt to guide you throu installing firedrake.
+Unpack it anywhere. Then you have a lot of manual laber in front of you since
+there is no installer yet.
+
+Quick guide:
+-edit and copy the iptables file to /etc/init.d
+	-optionaly add them to your default runlevel (gentoo: rc-update add iptables default)
+-copy the contents of the cgi folder to any folder in you cgi-bin area
+-copy the contents of the www folder somewhere in your document root
+-edit all in www and cgi and make sure cgi is executable by the user under which apache runs
+-don't forget to edit .htaccess, create an user and copy .htaccess to firedrake's cgi dir.
+
+#### the iptables file ####
+you absolutely SHOULD take a look at that file!!!
+you must edit the 
+config="/path/to/config"
+part!
+The rest is up to you. You are not required to use provided script with firedrake.
+
+Things you need in your iptables script:
+config="/path/to/config" <this would be the config that comes in the cgi folder.
+
+TCP:
+-open
+for vnos in $ODPRI_TCP; do
+	  port=`echo $vnos | awk -F- '{ print $1 }'`
+        ipji=`echo $vnos | awk -F- '{ print $2 }'`
+        ipji=`echo $ipji | tr ";" " "`
+        for ip in $ipji; do
+	  	iptables -A INPUT -p TCP -s $ip --dport $port -j ACCEPT
+	  done
+done
+
+-forward
+for vnos in $FORWARD_TCP; do
+        IP=`echo $vnos | awk -F- '{ print $1 }'`
+        porti=`echo $vnos | awk -F- '{ print $2 }'`
+	  porti=`echo $porti | tr ";" " "`
+	  for port in $porti do;
+	  	iptables -t nat -A PREROUTING -i $INET_IFACE -p tcp --dport $port -j DNAT --to $IP
+		iptables -A FORWARD -p tcp --dport $port -j ACCEPT
+	  done
+done 
+
+UDP:
+-open
+for vnos in $ODPRI_UDP; do
+	  port=`echo $vnos | awk -F- '{ print $1 }'`
+        ipji=`echo $vnos | awk -F- '{ print $2 }'`
+        ipji=`echo $ipji | tr ";" " "`
+        for ip in $ipji; do
+	  	iptables -A INPUT -p UDP -s $ip --dport $port -j ACCEPT
+	  done
+done
+
+-forward
+for vnos in $FORWARD_UDP; do
+        IP=`echo $vnos | awk -F- '{ print $1 }'`
+        porti=`echo $vnos | awk -F- '{ print $2 }'`
+	  porti=`echo $porti | tr ";" " "`
+	  for port in $porti do;
+	  	iptables -t nat -A PREROUTING -i $INET_IFACE -p udp --dport $port -j DNAT --to $IP
+		iptables -A FORWARD -p udp --dport $port -j ACCEPT
+	  done
+done
+
+That said let's move on.
+
+#### the cgi folder ####
+As mentioned before you can copy this anywhere in your cgi-bin dir.
+edit the config file.
+set the localScript and lanScript to point to your lan.cgi and local.cgi files.
+set the d_root variable to point to he directory in your document where index.html
+and main.html can be found.
+IMPORTANT: make sure the apache's user is the owner of all the files and it has
+permissions to execute the scripts.
+
+#### the www folder ####
+copy it to your document root. Name it however you like.
+Edit the index.html:
+-in line 53 edit the a hrefs to point to your scripts
+-edit the .htaccess  file:
+	-AuthUserFile /etc/apache2/firewall
+	 change this to wherever your user file will reside.
+-create the user file:
+	-htpasswd -c /etc/apache2/firewall username
+	 NOTE: this file can be anywhere.
+-copy .htaccess file to firedrake's cgi dir.
+You're done :)
+

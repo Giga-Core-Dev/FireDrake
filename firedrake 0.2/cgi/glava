@@ -1,0 +1,40 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>.:Main:.</title>
+<style type="text/css">
+<!--
+body,td,th {
+	font-family: Courier New, Courier, mono;
+	color: #FFFFFF;
+	font-size: small;
+}
+body {
+	background-color: #000000;
+}
+a:link {
+	color: #CCCCCC;
+	text-decoration: none;
+}
+a:visited {
+	text-decoration: none;
+	color: #CCCCCC;
+}
+a:hover {
+	text-decoration: underline;
+	color: #CCCCCC;
+}
+a:active {
+	text-decoration: none;
+	color: #CCCCCC;
+}
+input {border:1px solid white; background-color:black; color:white;}
+input:focus {background-color: #555555}
+textarea {border: 1px solid white; background-color:black; color:white}
+textarea:focus {background-color: #555555}
+.status {color: #CCCCCC}
+.error {color: #FF0000}
+-->
+</style>
+</head>
+<body>

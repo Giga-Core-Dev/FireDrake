@@ -1,0 +1,22 @@
+#!/bin/bash
+lanScript="http://www.yourdomain.com/cgi-bin/the_dir_you_put_firedrake_in/lan.cgi"
+localScript="http://www.yourdomain.com/cgi-bin/the_dir_you_put_firedrake_in/local.cgi"
+d_root="http://www.yourdomain.com/document_root_firewall"
+
+IPTABLES='sudo iptables'
+iptables=$IPTABLES #compatibility :)
+
+INET_IP="193.77.150.47"
+INET_IFACE="ppp0"
+
+LAN_IP="192.168.0.1"
+LAN_IP_RANGE="192.168.0.0/16"
+LAN_IFACE="eth0"
+	
+LO_IFACE="lo"
+LO_IP="127.0.0.1"
+
+ODPRI_UDP=''
+FORWARD_TCP=''
+ODPRI_TCP=''
+FORWARD_UDP=''

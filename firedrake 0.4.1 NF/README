@@ -1,0 +1,45 @@
+README
+This is the readme for the firedrake firewall :).
+
+Let me begin by saying what you need to run firedrake.
+-A linux box connected to the internet obviously :)
+-apache with cgi support enabled and worling
+	. you can check this by running the test-cgi script in you cgi-bin directory
+	 http://www.yourdomain.com/cgi-bin/test-cgi
+-sudo ... altho it is not necesary, I would recommend it.
+	.Alternatives are: run apache as root (not recommended)
+	                   making iptables executable by the apache user (don't ask me how)
+	 if you chose sudo, you will need apache's user in sudoers file
+	 example (from Debian:) AuthUserFile /etc/apache2/firewall
+-working iptables ... built in or modules
+	.NOTE: if you have iptables as modules you should first load them in your iptables script.
+
+That just about sums it up I guess :)
+For instalation instructions read INSTALL.
+
+This software is not yet completed nor fully translated to english!
+Altho it can simplify handling the firewall you should be very careful what you input sice
+there is no imput screening yet ... it's on my TODO list I promise :)
+
+So far I'd recomend it only for learning and experimenting :)
+
+*** Project goals:
+My goal is in the first place to learn and to help others who feel the same need for the kind of program
+I'm making here.
+The project's goal is to one day become a nice, elegant and simple web-based interface to modern firewall needs.
+
+The road first started with a program rushed together in bash, but I have since decided it'd be easier to do it in perl.
+So from 0.4.1 on this is a perl project.
+
+Before the program evolves to 1.0 (in my opinoin this will mark the usable state of the project) I would like to achieve the following:
+	-a clean, nice iptables script
+	-a clean way to open/close ports, both on the fly and for the future (stored in a  config file)
+	-an effective way of forwarding internet (where only enabled clients would have access to the internet and network)
+	-a clean way to forward ports, both on the fly and for the future (stored in a  config file)
+
+Other features that are on my wishlist, that are not so important for the 1.0 release are:
+	-some sort of a config parser that would detect suspicious (network) activitiy and ban cilents.
+	 Also posible here would be to build some sort of interface for snort or any other such program.
+	-A way of enabling new users of the network to automaticaly register for internet use (perhaps only
+	 www throu a transparent proxy).
+	-Interface to a proxy, especially if the former point would rely on it.

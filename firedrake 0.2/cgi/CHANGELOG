@@ -1,0 +1,30 @@
+* Version 0.2 (23.5.2005):
+	-The first version, released to public (one_STEP)
+	-Added basic input checking against evil chars :)
+	-Fixed the GUI bug (now the page reloads with currnet data
+	 after change is made :)
+	-Named the program and created a banner :D
+	-Fixed all the bugs with writing into config file ( all entries
+	 should now be clean - without any ;; etc.)
+	-Security is still minimal - I need to devote some time to it :)
+	-program got 45/50 points on the Matura :)
+	-need to build a proper installer
+
+* Version 0.1 (22.4.2005):
+This is the first release of the program, only to meet the deadline :)
+It has the basic functionality, but only that.
+It handles local and lan ports and writes them to the config,
+lines to ensure their change in the active iptables rules are in place,
+but are doing nothing atm, just sitting there echoing :p.
+
+Known bugs:
+-GUI has a refresh bug; 
+	After a succesful change, the new data isn't beeing displayed.
+
+-Suspected bugs with rw operations on the config.
+	I think some evil characters remain in the config.
+	Like double ;;'s etc. :)
+
+-Some security issues exist (don't they always? :)
+	Security at this point is very basic
+	It needs to be extensively rebuilt :)

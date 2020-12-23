@@ -1,0 +1,7 @@
+INSTALL firedrake 0.4.1
+Nothing to be installed here :)
+This release is only for safekeeping and learning.
+If you wish to have a go with it copy everything from this folder to any folder in your webroot
+including all the hidden files.
+Play around with your apache config untill you get it working. When you do you can login using
+the username "ces" and password "lolek". So far there is no procedure to change them ;).

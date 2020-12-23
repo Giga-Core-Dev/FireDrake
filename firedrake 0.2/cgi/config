@@ -1,0 +1,17 @@
+#!/bin/bash
+IPTABLES='echo iptables'
+
+INET_IP="193.77.150.47"
+INET_IFACE="ppp0"
+
+LAN_IP="192.168.0.1"
+LAN_IP_RANGE="192.168.0.0/16"
+LAN_IFACE="eth0"
+	
+LO_IFACE="lo"
+LO_IP="127.0.0.1"
+
+ODPRI_UDP=''
+FORWARD_TCP=''
+ODPRI_TCP=''
+FORWARD_UDP=''

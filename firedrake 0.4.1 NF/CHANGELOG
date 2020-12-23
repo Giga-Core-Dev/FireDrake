@@ -1,0 +1,31 @@
+* Version 0.4.1 (4.5.2006):
+	-A complete rewrite in Perl.
+		-added a sessions manager (built ground up)
+		-shiny new look
+		-first major step towards increased security.
+		-leaning towards modular design
+	-NOT FINISHED: it has no functionality yet.
+
+* Version 0.3 (11.1.2006):
+	-Some changes to avoid confusion
+	-cleaned up setup procedure (the first step towards any installer :)
+	-minor securitiy update.
+
+* Version 0.2 (23.5.2005):
+	-The first version, released to public
+	-Added basic input checking against evil chars :)
+	-Fixed the GUI bug (now the page reloads with currnet data
+	 after change is made :)
+	-Named the program and created a banner :D
+	-Fixed all the bugs with writing into config file ( all entries
+	 should now be clean - without any ;; etc.)
+	-Security is still minimal - I need to devote some time to it :)
+	-program got 45/50 points on the Matura :)
+	-need to build a proper installer
+
+* Version 0.1 (22.4.2005):
+	This is the first release of the program, only to meet the deadline :)
+	It has the basic functionality, but only that.
+	It handles local and lan ports and writes them to the config,
+	lines to ensure their change in the active iptables rules are in place,
+	but are doing nothing atm, just sitting there echoing :p.
